@@ -16,6 +16,7 @@ import { ImageResizer } from "./extensions/image-resizer";
 import { EditorProps } from "@tiptap/pm/view";
 import { Editor as EditorClass, Extensions } from "@tiptap/core";
 import { NovelContext } from "./provider";
+import { cn } from "@/lib/utils";
 
 export default function Editor({
   completionApi = "/api/generate",
@@ -202,21 +203,23 @@ export default function Editor({
   }, [editor, defaultValue, content, hydrated, disableLocalStorage]);
 
   return (
-    <NovelContext.Provider
-      value={{
-        completionApi,
-      }}
-    >
-      <div
-        onClick={() => {
-          editor?.chain().focus().run();
+    <div>
+      <NovelContext.Provider
+        value={{
+          completionApi,
         }}
-        className={className}
       >
-        {editor && <EditorBubbleMenu editor={editor} />}
-        {editor?.isActive("image") && <ImageResizer editor={editor} />}
-        <EditorContent editor={editor} />
-      </div>
-    </NovelContext.Provider>
+        <div
+          onClick={() => {
+            editor?.chain().focus().run();
+          }}
+          className={cn(className)}
+        >
+          {editor && <EditorBubbleMenu editor={editor} />}
+          {editor?.isActive("image") && <ImageResizer editor={editor} />}
+          <EditorContent editor={editor} />
+        </div>
+      </NovelContext.Provider>
+    </div>
   );
 }
